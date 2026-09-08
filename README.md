@@ -2,6 +2,18 @@
 
 Reusable Terraform module for creating an Azure Resource Group using the AzureRM provider.
 
+The resource group name is generated using the following convention:
+
+```text
+rg-{app_abbreviation}-{environment}-{subscription}-{instance}
+```
+
+Example:
+
+```text
+rg-pay-poc-lab-001
+```
+
 ## Requirements
 
 | Name | Version |
@@ -15,8 +27,10 @@ Reusable Terraform module for creating an Azure Resource Group using the AzureRM
 module "resource_group" {
   source = "git::https://github.com/jeff1649/azurerm-resource-group.git?ref=v1.0.0"
 
-  name     = "rg-example-poc"
-  location = "centralus"
+  app_abbreviation = "pay"
+  environment      = "poc"
+  subscription     = "lab"
+  location         = "centralus"
 
   tags = {
     environment = "poc"
@@ -25,11 +39,32 @@ module "resource_group" {
 }
 ```
 
+This creates:
+
+```text
+rg-pay-poc-lab-001
+```
+
+To create another resource group using the same naming components:
+
+```hcl
+instance = 2
+```
+
+This creates:
+
+```text
+rg-pay-poc-lab-002
+```
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-| name | Name of the resource group. | `string` | n/a | yes |
+| app_abbreviation | Abbreviated application name used in the resource group name. | `string` | n/a | yes |
+| environment | Environment name. Allowed values: `poc`, `dev`, `test`, `prod`. | `string` | n/a | yes |
+| subscription | Subscription abbreviation used in the resource group name. | `string` | n/a | yes |
+| instance | Instance number appended as a three-digit value. | `number` | `1` | no |
 | location | Azure region for the resource group. | `string` | n/a | yes |
 | tags | Tags applied to the resource group. | `map(string)` | `{}` | no |
 
