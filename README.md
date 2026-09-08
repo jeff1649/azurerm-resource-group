@@ -1,6 +1,6 @@
-# AzureRM Terraform Module
+# AzureRM Resource Group Module
 
-Reusable Terraform module for Microsoft Azure using the AzureRM provider.
+Reusable Terraform module for creating an Azure Resource Group using the AzureRM provider.
 
 ## Requirements
 
@@ -12,27 +12,37 @@ Reusable Terraform module for Microsoft Azure using the AzureRM provider.
 ## Usage
 
 ```hcl
-module "example" {
-  source = "git::https://github.com/jeff1649/REPOSITORY-NAME.git?ref=v1.0.0"
+module "resource_group" {
+  source = "git::https://github.com/jeff1649/azurerm-resource-group.git?ref=v1.0.0"
 
-  # Module variables
+  name     = "rg-example-poc"
+  location = "centralus"
+
+  tags = {
+    environment = "poc"
+    managed_by  = "terraform"
+  }
 }
 ```
 
 ## Inputs
 
-Document module input variables here.
-
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
+| name | Name of the resource group. | `string` | n/a | yes |
+| location | Azure region for the resource group. | `string` | n/a | yes |
+| tags | Tags applied to the resource group. | `map(string)` | `{}` | no |
 
 ## Outputs
 
-Document module outputs here.
-
 | Name | Description |
 |------|-------------|
+| id | ID of the resource group. |
+| name | Name of the resource group. |
+| location | Location of the resource group. |
 
 ## Resources
 
-Document the Azure resources created by this module here.
+This module creates:
+
+- `azurerm_resource_group`
